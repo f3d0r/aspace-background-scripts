@@ -12,7 +12,7 @@ module.exports = {
                     connection.release();
                     if (error)
                         failCB(error);
-                    else 
+                    else
                         successCB(results);
                 });
 
@@ -32,22 +32,22 @@ module.exports = {
                     else
                         successCB(results);
                 });
-                
+
             });
         },
         addSession: function (last_location, parking_dest, rem_bikes, rem_scoots, mode, access_code, device_id, successCB, failCB) {
             db.getConnection(function (err, connection) {
-               getUserId(access_code, device_id, function (user_id) {
-                var sql = 'INSERT INTO `routing_sessions` (`user_id`, `last_location`,`parking_dest`,`remaining_bikes`,`remaining_scoots`,`mode`) VALUES (?,?,?,?,?,?);';
-                sql += 'SELECT `session_id` FROM `routing_sessions` WHERE `user_id` = ? AND `status` = 0';
-                connection.query(sql, [user_id, last_location, parking_dest, rem_bikes, rem_scoots, mode, user_id], function (error, results, fields) {
-                    connection.release();
-                    if (error) {
-                        failCB(error);
-                    } else {
-                        successCB(results[1][0].session_id);
-                    }  
-                });
+                getUserId(access_code, device_id, function (user_id) {
+                    var sql = 'INSERT INTO `routing_sessions` (`user_id`, `last_location`,`parking_dest`,`remaining_bikes`,`remaining_scoots`,`mode`) VALUES (?,?,?,?,?,?);';
+                    sql += 'SELECT `session_id` FROM `routing_sessions` WHERE `user_id` = ? AND `status` = 0';
+                    connection.query(sql, [user_id, last_location, parking_dest, rem_bikes, rem_scoots, mode, user_id], function (error, results, fields) {
+                        connection.release();
+                        if (error) {
+                            failCB(error);
+                        } else {
+                            successCB(results[1][0].session_id);
+                        }
+                    });
                 }, function () {
                     // user_id not found
                     successCB("user_id_not_found");
@@ -181,7 +181,7 @@ module.exports = {
                     connection.release();
                     if (error)
                         failCB(error);
-                    else 
+                    else
                         successCB(rows);
                 });
             });
@@ -202,6 +202,18 @@ module.exports = {
                 });
             });
         },
+        bikeQuantityUpdate: function (update_data, successCB, failCB) {
+            db.getConnection(function (err, connection) {
+                var sql = "UPDATE `routing_sessions` SET `remaining_bikes` = ? WHERE `session_id` = ?";
+                connection.query(sql, update_data, function (error, results, fields) {
+                    connection.release();
+                    if (error)
+                        failCB(error);
+                    else // if (results.affectedRows == 1)
+                        successCB();
+                });
+            });
+        }
     },
     runRaw: function (sql, successCB, failCB) {
         db.getConnection(function (err, connection) {

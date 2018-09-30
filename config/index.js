@@ -44,5 +44,8 @@ module.exports = {
         PARK_WALK: '***REMOVED***',
         time_threshold: 600,
         cluster_distance_threshold: 0.1
+    },
+    sessions: {
+        update_interval: 15000
     }
 }
