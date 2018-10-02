@@ -46,6 +46,7 @@ module.exports = {
         cluster_distance_threshold: 0.1
     },
     sessions: {
-        update_interval: 15000
+        update_interval: 15000,
+        end_session_threshold: 10 // minutes
     }
 }
