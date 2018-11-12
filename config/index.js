@@ -49,4 +49,4 @@ module.exports = {
         update_interval: 15000,
         end_session_threshold: 10 // minutes
     }
-}
+};
